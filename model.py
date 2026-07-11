@@ -20,23 +20,56 @@ def build_token_to_id_vocab(sentences, specials=('<pad>', '<bos>', '<eos>', '<un
     
     return vocab
 
-# Step 2 - build_id_to_token_vocab (not yet solved)
-# TODO: implement
+# Step 2 - build_id_to_token_vocab
+def build_id_to_token_vocab(token_to_id):
+    # TODO: build the inverse id-to-token dictionary from token_to_id
+    return {token_id : token for token,token_id in token_to_id.items()}
 
-# Step 3 - encode_sentence_to_ids (not yet solved)
-# TODO: implement
+# Step 3 - encode_sentence_to_ids
+def encode_sentence_to_ids(sentence, token_to_id, unk_token='<unk>'):
+    # TODO: convert whitespace tokens of `sentence` to ids via `token_to_id`, using `unk_token`'s id for OOV
+    unk_id = token_to_id[unk_token]
+    ids = []
 
-# Step 4 - decode_ids_to_tokens (not yet solved)
-# TODO: implement
+    for token in sentence.split():
+        ids.append(token_to_id.get(token, unk_id))
+    
+    return ids
 
-# Step 5 - pad_id_sequence (not yet solved)
-# TODO: implement
+# Step 4 - decode_ids_to_tokens
+def decode_ids_to_tokens(ids, id_to_token):
+    # TODO: map each id in ids to its token string via id_to_token and return the list
+    tokens = []
 
-# Step 6 - stack_padded_sequences_to_batch (not yet solved)
-# TODO: implement
+    for token_ids in ids:
+        tokens.append(id_to_token[token_ids])
+    
+    return tokens
 
-# Step 7 - scale_embeddings_by_sqrt_d_model (not yet solved)
-# TODO: implement
+# Step 5 - pad_id_sequence
+def pad_id_sequence(ids, max_len, pad_id):
+    # TODO: return a list of length exactly max_len, padding with pad_id or truncating.
+    if len(ids) < max_len:
+        return ids + [pad_id] * (max_len - len(ids))
+    else:
+        return ids[:max_len]
+
+# Step 6 - stack_padded_sequences_to_batch
+import torch
+
+def stack_padded_sequences_to_batch(padded_sequences):
+    """Stack a list of equal-length padded id sequences into a 2D LongTensor batch."""
+    # TODO: stack padded id sequences into a (B, L) torch.long tensor
+    return torch.tensor(padded_sequences, dtype=torch.long)
+
+# Step 7 - scale_embeddings_by_sqrt_d_model
+import math
+import torch
+
+def scale_embeddings_by_sqrt_d_model(embeddings, d_model):
+    """Scale a token embedding tensor by sqrt(d_model)."""
+    # TODO: rescale embeddings by sqrt(d_model) as in the original Transformer paper
+    return embeddings * math.sqrt(d_model)
 
 # Step 8 - compute_positional_div_term (not yet solved)
 # TODO: implement
